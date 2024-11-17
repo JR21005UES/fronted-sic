@@ -96,16 +96,23 @@ const router = [
   },
   {
     id: 2,
-    name: 'Usuarios',
-    uri: '/usuarios',
-    icono: 'mdi-account',
+    name: 'Cuentas',
+    uri: 'listado-cuentas',
+    uriName: 'listado_cuentas',
+    icono: 'mdi-book-multiple',
+  },
+  {
+    id: 3,
+    name: 'Reportes',
+    uri: '/reportes',
+    icono: 'mdi-alert-box',
     hijos: [
       {
         id: 1,
-        name: 'Listado',
-        uri: '/listado',
-        uriName: 'usersList',
-        icono: 'mdi-account-group',
+        name: 'Libro Diario',
+        uri: 'libro-diario',
+        uriName: 'libro_diario',
+        icono: 'mdi-book-open-variant',
       },
       {
         id: 2,
@@ -116,13 +123,6 @@ const router = [
       }
     ],
   },
-  {
-    id: 3,
-    name: 'Cuentas',
-    uri: 'listado-cuentas',
-    uriName: 'listado_cuentas',
-    icono: 'mdi-book-multiple',
-  }
 ]
 const auth = useAuthStore()
 const open = ref(['Usuario'])
