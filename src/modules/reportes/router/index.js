@@ -1,8 +1,9 @@
-const reportesRouter = [
+const reporteRouter = [
     {
-      path: "/libDiario",
+      path: "/libro-diario",
       name: "libro_diario",
-      component: () => import("../views/LibroDiarioView.vue"),
-    },
+      component: () => import("../views/libroDiarioView.vue"),
+    }
   ];
-  export default reportesRouter;
+
+  export default reporteRouter;

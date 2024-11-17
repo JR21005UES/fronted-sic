@@ -3,6 +3,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import {useUtils} from '@/plugins/utils'
 import authRouter from '@/views/auth/router'
 import catalogoCuentasRouter from '@/modules/catalogos/router'
+import reporteRouter from '@/modules/reportes/router'
 
 const {canNavigate} = useUtils()
 
@@ -21,6 +22,7 @@ const routes = [
       },
       ...authRouter,
       ...catalogoCuentasRouter,
+      ...reporteRouter,
     ],
     meta: {
       requiresAuth: true,
