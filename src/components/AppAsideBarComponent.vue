@@ -116,10 +116,10 @@ const router = [
       },
       {
         id: 2,
-        name: 'Nuevo',
-        uri: '/crear',
-        uriName: 'usersCreate',
-        icono: 'mdi-account-plus',
+        name: 'Libro Mayor',
+        uri: 'libro-mayor',
+        uriName: 'libro_mayor',
+        icono: 'mdi-account-credit-card',
       }
     ],
   },
