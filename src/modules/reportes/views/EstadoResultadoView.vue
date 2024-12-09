@@ -49,7 +49,7 @@ const items_tabla = ref([])
 const filtro = ref(null)
 
 const llenarTabla = async () => {
-  const {data} = await reporteServices.getEstadoResultado(200000)
+  const {data} = await reporteServices.getEstadoResultado()
   items_tabla.value = data
 }  
 onMounted(() => {

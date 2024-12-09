@@ -6,7 +6,7 @@ const getLibroDiario = async(params= {}) => {
 const getLibroMayor = async(params= {}) => {
   return network.get('/libMayor', {params})
 }
-const getEstadoResultado = async(inv_fin ,params= {}) => {
+const getEstadoResultado = async(params= {}) => {
   return network.get('/estadoResul/${inv_fin}', {params})
 } 
 export default {

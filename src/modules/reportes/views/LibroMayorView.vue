@@ -30,9 +30,10 @@
           <v-simple-table class="tabla-movimientos">
             <thead>
               <tr>
-                <th class="text-left">Partida No. #</th>
+                <th class="text-left">Partida No.</th>
                 <th class="text-left">Debe</th>
                 <th class="text-right">Haber</th>
+                <th class="text-right">Parcial</th>
                 <th class="text-right">Concepto</th>
               </tr>
             </thead>
@@ -41,6 +42,7 @@
                 <td class="text-left">{{ movimiento.numero_partida }}</td>
                 <td class="text-left">{{ movimiento.debe.toFixed(2) }}</td>
                 <td class="text-right">{{ movimiento.haber.toFixed(2) }}</td>
+                <td class="text-right">{{ movimiento.total.toFixed(2)}}</td>
                 <td class="text-right">{{ movimiento.concepto }}</td>
               </tr>
             </tbody>
