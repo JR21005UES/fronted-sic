@@ -121,6 +121,14 @@ const router = [
         uriName: 'libro_mayor',
         icono: 'mdi-account-credit-card',
       }
+      ,
+      {
+        id: 3,
+        name: 'Estado de resultado',
+        uri: 'estado-resultado',
+        uriName: 'estado_resultado',
+        icono: 'mdi-account-credit-card',
+      }
     ],
   },
 ]
