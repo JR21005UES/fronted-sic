@@ -10,8 +10,12 @@ const deleteCuenta = async(id_cuenta) =>
 const crearCuenta = async(data) =>
   network.post(`/catalogo`, data)
 
+const editarCuenta = async(id_cuenta, data) =>
+  network.put(`/catalogo/${id_cuenta}`, data)
+
 export default {
   getCuentas,
   deleteCuenta,
   crearCuenta,
+  editarCuenta,
 }

@@ -9,9 +9,12 @@ const getLibroMayor = async(params= {}) => {
 const getEstadoResultado = async(params= {}) => {
   return network.get('/estadoResul/${inv_fin}', {params})
 } 
+const getBalanceGeneral = async(params= {}) => {
+  return network.get('/balanceGen', {params})
+} 
 export default {
   getLibroDiario,
   getLibroMayor,
   getEstadoResultado,
-  
+  getBalanceGeneral,
 }

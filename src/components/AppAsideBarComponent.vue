@@ -120,14 +120,20 @@ const router = [
         uri: 'libro-mayor',
         uriName: 'libro_mayor',
         icono: 'mdi-account-credit-card',
-      }
-      ,
+      },
       {
         id: 3,
         name: 'Estado de resultado',
         uri: 'estado-resultado',
         uriName: 'estado_resultado',
-        icono: 'mdi-account-credit-card',
+        icono: 'mdi-equalizer',
+      },
+      {
+        id: 4,
+        name: 'Balance General',
+        uri: 'balance-general',
+        uriName: 'balance_general',
+        icono: 'mdi-badge-account-horizontal',
       }
     ],
   },

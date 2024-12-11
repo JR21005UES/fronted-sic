@@ -13,7 +13,13 @@ const reporteRouter = [
       path: "/estado-resultado",
       name: "estado_resultado",
       component: () => import("../views/EstadoResultadoView.vue"),
-    }
+    },
+    {
+      path: "/balance-general",
+      name: "balance_general",
+      component: () => import("../views/BalanceGeneral.vue"),
+    },
+
   ];
 
   export default reporteRouter;

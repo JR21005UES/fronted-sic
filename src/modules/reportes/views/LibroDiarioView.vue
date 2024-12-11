@@ -3,9 +3,11 @@
     <h1 class="text-center">Libro Diario</h1>
     <v-row class="my-3 px-3" no-gutters justify="space-between">
       <div style="width: 300px">
-        <v-text-field prepend-inner-icon="mdi-magnify" density="compact" variant="outlined" v-model="filtro"
-          label="Buscar..." />
-      </div>
+          <v-text-field prepend-inner-icon="mdi-magnify" density="compact" variant="outlined" v-model="filtro"
+            label="Buscar..." />
+        </div>
+      <!-- Botón para generar el archivo Excel -->
+      <v-btn @click="generarExcel" color="primary" elevation="2">Generar Excel</v-btn>
     </v-row>
     <v-data-table :headers="headers" :items="items_tabla" no-data-text="Sin datos para mostrar" :search="filtro" class="elevation-1">
       <!-- Botón para abrir el modal -->
@@ -116,6 +118,73 @@ const cerrarModal = () => {
 onMounted(() => {
   llenarTabla();
 });
+
+
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver'; // Necesitamos FileSaver para descargar el archivo
+
+const generarExcel = async () => {
+  if (!items_tabla.value.length) {
+    alert('No hay datos para exportar');
+    return;
+  }
+
+  // Crear un nuevo libro de trabajo
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Libro Diario');
+
+  // Agregar un título
+  worksheet.mergeCells('A1:E1'); // Fusionar celdas para el título
+  const titleCell = worksheet.getCell('A1');
+  titleCell.value = 'Libro Diario';
+  titleCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
+  titleCell.font = { bold: true, size: 14 }; // Estilo de la fuente
+
+  // Agregar encabezados de la tabla principal
+  worksheet.addRow(['Número de Partida', 'Código', 'Nombre de Cuenta', 'Debe', 'Haber']).font = { bold: true };
+
+  // Iterar sobre las partidas y agregar los movimientos
+  items_tabla.value.forEach((partida) => {
+    // Agregar una fila para el número de partida
+    worksheet.addRow([`Partida ${partida.numero_partida}`, '', '', '', '']).font = { bold: true, size: 12 };
+
+    // Agregar los movimientos de la partida
+    partida.movimientos.forEach((movimiento) => {
+      worksheet.addRow([
+        '', // Número de partida vacío en los movimientos
+        movimiento.codigo,
+        movimiento.nombre_cuenta,
+        movimiento.debe.toFixed(2),
+        movimiento.haber.toFixed(2),
+      ]);
+    });
+
+    // Agregar una fila para el concepto al final de los movimientos
+    const conceptoRow = worksheet.addRow([`Concepto: ${partida.concepto}`, '', '', '', '']);
+    worksheet.mergeCells(`A${conceptoRow.number}:E${conceptoRow.number}`); // Combinar celdas de A a E
+    conceptoRow.getCell(1).alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar texto
+    conceptoRow.font = { italic: true, size: 11 }; // Aplicar estilo al concepto
+
+    // Espacio entre partidas
+    worksheet.addRow([]);
+  });
+
+  // Ajustar ancho de columnas
+  worksheet.columns = [
+    { width: 20 }, // Columna 1: Número de Partida
+    { width: 15 }, // Columna 2: Código
+    { width: 45 }, // Columna 3: Nombre de Cuenta
+    { width: 15 }, // Columna 4: Debe
+    { width: 15 }, // Columna 5: Haber
+  ];
+
+  // Crear el archivo Excel
+  const buffer = await workbook.xlsx.writeBuffer();
+
+  // Descargar el archivo
+  saveAs(new Blob([buffer]), 'Libro_Diario.xlsx');
+};
+
 </script>
 <style scoped>
 .tabla-movimientos {
