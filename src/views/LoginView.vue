@@ -63,9 +63,9 @@
           <LogoComponent />
         </v-col>
         <v-col sm="8" cols="12">
-          <p>Rolando Rivera</p>
-          <p>Ejemplo de footer</p>
-          <p>© 2023 - Todos los derechos reservados</p>
+          <p>ENCOM</p>
+          <p>© 2024 Sistema de Contabilidad - Ciclo Contable.</p>
+          <p>Todos los derechos reservados. | Política de Privacidad | Términos y Condiciones | Soporte Técnico</p>
         </v-col>
         <v-col sm="2" cols="12" class="d-none d-sm-flex justify-end">
           <LogoComponent />

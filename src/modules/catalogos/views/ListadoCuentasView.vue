@@ -86,7 +86,7 @@ const eliminarRegistro = async (item) => {
 }
 
 const editarRegistro = async (item) => {
-  await catalogoServices.editarCuenta(item.codigo)
+  await catalogoServices.editarCuenta(item.codigo, item)
   llenarTabla()
 }
 
