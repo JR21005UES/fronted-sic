@@ -157,20 +157,9 @@ const guardarCambios = async () => {
 
 
 const eliminarRegistro = async (item) => {
-<<<<<<< HEAD
-  await catalogoServices.deleteCuenta(item.codigo)
-  llenarTabla()
-}
-
-const editarRegistro = async (item) => {
-  await catalogoServices.editarCuenta(item.codigo, item)
-  llenarTabla()
-}
-=======
   await catalogoServices.deleteCuenta(item.codigo);
   llenarTabla();
 };
->>>>>>> f5db9eb06310bc8d5466051f6e41f6ae47c0ba67
 
 const crearCuenta = () => {
   router.push({ name: "crear_cuenta" });
