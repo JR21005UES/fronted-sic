@@ -18,7 +18,13 @@ const reporteRouter = [
       path: "/balance-general",
       name: "balance_general",
       component: () => import("../views/BalanceGeneral.vue"),
+    }, 
+    {
+      path: "/nueva-partida",
+      name: "nueva_partida",
+      component: () => import("../views/CrearPartida.vue"),
     },
+
 
   ];
 
