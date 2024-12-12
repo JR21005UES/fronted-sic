@@ -60,6 +60,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import reporteServices from '@/services/reportes';
+import useNoti from "@/composables/useNoti";
+const { notify } = useNoti(); // Inicializar notificaciones
 
 const filtro = ref(null)
 
@@ -183,6 +185,7 @@ const generarExcel = async () => {
 
   // Descargar el archivo
   saveAs(new Blob([buffer]), 'Libro_Diario.xlsx');
+  notify("Se genero el Excel con exito", "success");
 };
 
 </script>

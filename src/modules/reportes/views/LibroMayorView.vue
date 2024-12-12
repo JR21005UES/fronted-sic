@@ -71,6 +71,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import reporteServices from '@/services/reportes';
+import useNoti from "@/composables/useNoti";
+
+const { notify } = useNoti(); // Inicializar notificaciones
+
 
 const filtro = ref(null)
 
@@ -208,6 +212,7 @@ const generarExcelBalanza = async () => {
 
   // Descargar el archivo
   saveAs(new Blob([buffer]), 'Balanza_Comprobacion.xlsx');
+  notify("Archivo Excel generado exitosamente", "success");
 };
 
 // Función para generar el Excel de los Libro Mayor
@@ -276,6 +281,7 @@ const generarExcelMovimientos = async () => {
 
   // Descargar el archivo
   saveAs(new Blob([buffer]), 'Libro_Mayor.xlsx');
+  notify("Archivo Excel generado exitosamente", "success");
 };
 
 
