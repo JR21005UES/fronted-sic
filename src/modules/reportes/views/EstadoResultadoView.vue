@@ -45,7 +45,9 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
+import useNoti from "@/composables/useNoti";
 
+const { notify } = useNoti(); // Inicializar notificaciones
 const filtro = ref(null)
 const invFinal = ref(""); // Campo de texto para inventario final
 const estadoResultado = ref([]); // Datos de la tabla
@@ -75,8 +77,12 @@ const calcularEstadoResultado = async () => {
   estadoResultado.value = []; // Limpia la tabla
 
   if (!invFinal.value) {
-    error.value = "Por favor, ingresa el valor del inventario final.";
-    return;
+    notify("Campo vacio, Ingrese un valor ", "error");//cambio AHORAAAAAAAAAAA
+    return ;
+  }
+  if (invFinal.value < 1 ) {
+    notify("El valor tiene que ser positivo", "error");//cambio AHORAAAAAAAAAAA    return;
+    return ;
   }
 
   try {
@@ -87,10 +93,12 @@ const calcularEstadoResultado = async () => {
     estadoResultado.value = response.data;
   } catch (err) {
     console.error(err);
-    error.value = "Ocurrió un error al obtener el estado de resultados.";
+    notify("Por favor ingrese un numero", "error");//cambio AHORAAAAAAAAAAA
+    return ;
   } finally {
     loading.value = false;
   }
+  notify("Estado de Resultado generado con exito", "success");
 };
 
 import ExcelJS from 'exceljs';
@@ -98,7 +106,7 @@ import { saveAs } from 'file-saver'; // Necesitamos FileSaver para descargar el 
 
 const generarExcel = async () => {
   if (!estadoResultado.value.length) {
-    alert('No hay datos para exportar');
+    notify("NO HAY DATOS PARA EXPORTAR", "error");
     return;
   }
 
@@ -109,7 +117,7 @@ const generarExcel = async () => {
   // Agregar un título
   worksheet.mergeCells('A1:C1'); // Fusionar celdas para el título
   const titleCell = worksheet.getCell('A1');
-  titleCell.value = 'Esado de Resultado';
+  titleCell.value = 'Estado de Resultado';
   titleCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
   titleCell.font = { bold: true, size: 14 }; // Estilo de la fuente
 
@@ -132,6 +140,7 @@ const generarExcel = async () => {
 
   // Descargar el archivo
   saveAs(new Blob([buffer]), 'Estado_Resultado.xlsx');
+  notify("Excel generado exitosamente", "success");
 };
 
 </script>
