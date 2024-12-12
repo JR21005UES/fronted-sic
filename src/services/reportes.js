@@ -9,8 +9,18 @@ const getLibroMayor = async(params= {}) => {
 const getEstadoResultado = async(params= {}) => {
   return network.get('/estadoResul/${inv_fin}', {params})
 } 
+
+const getEstadoResultadoCierre = async(params= {}) => {
+  return network.get('/estadoResulCierre', {params})
+} 
+const getCierre = async(params= {}) => {
+  return network.get('/cierre', {params})
+} 
 const getBalanceGeneral = async(params= {}) => {
   return network.get('/balanceGen', {params})
+} 
+const getBalanceGeneralCierre = async(params= {}) => {
+  return network.get('/balanceGenCierre', {params})
 } 
 const crearPartida = async(data) =>
   network.post(`/partida`, data)
@@ -36,5 +46,8 @@ export default {
   editarPartida,
   editarDato,
   deleteDato,
-  crearDato
+  crearDato,
+  getEstadoResultadoCierre,
+  getBalanceGeneralCierre,
+  getCierre,
 }

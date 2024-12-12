@@ -8,11 +8,11 @@
         </div>
       <!-- Botón para generar el archivo Excel -->
       <v-row justify="end" class="my-3" style="gap: 10px;">
-        <v-btn @click="generarExcel" color="primary" elevation="2">Generar Excel</v-btn>
+        <v-btn @click="generarExcel" color="green-darken-4" elevation="2">Generar Excel</v-btn>
         <!-- Botón para Moverme a la vista de CrearDatoView.vue -->
         <v-btn @click="moverACrearPartida" color="primary" elevation="2">Crear Partida</v-btn>
         <!-- Botón para Moverme a la vista de CrearDatoView.vue -->
-        <v-btn @click="moverACrearDato" color="primary" elevation="2">Crear Dato</v-btn>
+        <v-btn @click="moverACrearDato" color="secondary  " elevation="2">Crear Dato</v-btn>
       </v-row>
     </v-row>
     
@@ -391,11 +391,17 @@ const generarExcel = async () => {
   const worksheet = workbook.addWorksheet('Libro Diario');
 
   // Agregar un título
-  worksheet.mergeCells('A1:E1'); // Fusionar celdas para el título
-  const titleCell = worksheet.getCell('A1');
-  titleCell.value = 'Libro Diario';
-  titleCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
-  titleCell.font = { bold: true, size: 14 }; // Estilo de la fuente
+        worksheet.mergeCells('B1:C1'); // Fusionar celdas para el título
+        const titleCell2 = worksheet.getCell('B1');
+        titleCell2.value = 'ENCOM S.A. de C.V.';
+        titleCell2.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
+        titleCell2.font = { bold: true, size: 14 }; // Estilo de la fuente
+        // Agregar un título
+        worksheet.mergeCells('B2:C2'); // Fusionar celdas para el título
+        const titleCell = worksheet.getCell('B2');
+        titleCell.value = 'Libro Diario';
+        titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+        titleCell.font = { bold: true, size: 14 };
 
   // Agregar encabezados de la tabla principal
   worksheet.addRow(['Número de Partida', 'Código', 'Nombre de Cuenta', 'Debe', 'Haber']).font = { bold: true };

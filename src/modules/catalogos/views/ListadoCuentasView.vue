@@ -11,7 +11,10 @@
           label="Buscar..."
         />
       </div>
-      <v-btn @click="crearCuenta">Crear cuenta</v-btn>
+      <v-row justify="end" class="my-3" style="gap: 10px;">
+        <v-btn color="primary" @click="crearCuenta">Crear cuenta</v-btn>
+        <v-btn color="green-darken-3" @click="generarExcel">Exportar a Excel</v-btn>
+      </v-row>
     </v-row>
     <v-data-table
       :headers="headers"
@@ -87,8 +90,12 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import catalogoServices from "@/services/catalogos";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 import { useRouter } from "vue-router";
+import useNoti from "@/composables/useNoti";
 
+const { notify } = useNoti();
 const router = useRouter();
 
 const headers = [
@@ -120,7 +127,6 @@ const llenarTabla = async () => {
 };
 
 const abrirModalEdicion = (item) => {
-  console.log("Datos del item seleccionado:", item);
   form.value = { ...item };
   dialogoEdicion.value = true;
 };
@@ -131,38 +137,79 @@ const cerrarModalEdicion = () => {
 
 const guardarCambios = async () => {
   try {
-    console.log("ID enviado:", form.value.codigo); // Verifica el ID
-    console.log("Datos enviados al backend:", {
-      nombre: form.value.nombre,
-      descripcion: form.value.descripcion,
-    });
-
-    // Llama al servicio con el ID y los datos del formulario
     await catalogoServices.editarCuenta(form.value.codigo, {
       nombre: form.value.nombre,
       descripcion: form.value.descripcion,
     });
-
-    alert("Cuenta actualizada correctamente");
+    notify("Cuenta actualizada exitosamente", "success");
     cerrarModalEdicion();
-    llenarTabla(); // Recargar la tabla
+    llenarTabla();
   } catch (error) {
-    console.error("Error al guardar los cambios:", error.response || error);
-    alert(
+    notify(
       error.response?.data?.message ||
-        "No se pudo guardar la cuenta. Verifica los datos."
+        "No se pudo guardar la cuenta. Verifica los datos.",
+      "error"
     );
   }
 };
 
-
 const eliminarRegistro = async (item) => {
-  await catalogoServices.deleteCuenta(item.codigo);
+  try {
+    const response = await catalogoServices.deleteCuenta(item.codigo);
+    if (response.status === 200) {
+      notify("Cuenta eliminada exitosamente", "success");
+    }
+  } catch (error) {
+    notify("Error al eliminar la cuenta. Verifica y vuelve a intentar.", "error");
+  }
   llenarTabla();
 };
 
 const crearCuenta = () => {
   router.push({ name: "crear_cuenta" });
+};
+
+// Generar el Excel
+const generarExcel = async () => {
+  if (!items_tabla.value.length) {
+    notify("No hay datos para exportar", "error");
+    return;
+  }
+
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Listado de Cuentas");
+
+  worksheet.mergeCells('B1:E1'); // Fusionar celdas para el título
+        const titleCell2 = worksheet.getCell('B1');
+        titleCell2.value = 'ENCOM S.A. de C.V.';
+        titleCell2.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
+        titleCell2.font = { bold: true, size: 14 }; // Estilo de la fuente
+        // Agregar un título
+        worksheet.mergeCells('B2:E2'); // Fusionar celdas para el título
+        const titleCell = worksheet.getCell('B2');
+        titleCell.value = 'Catalogo de Cuentas';
+        titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+        titleCell.font = { bold: true, size: 14 };
+
+  worksheet.addRow(["", "Código", "Nombre", "Descripción", "Naturaleza"]).font = {
+    bold: true,
+  };
+
+  items_tabla.value.forEach((item) => {
+    worksheet.addRow(["", item.codigo, item.nombre, item.descripcion, item.naturaleza]);
+  });
+
+  worksheet.columns = [
+    { width: 10 },
+    { width: 15 },
+    { width: 30 },
+    { width: 40 },
+    { width: 20 },
+  ];
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  saveAs(new Blob([buffer]), "Catalogo_de_Cuentas.xlsx");
+  notify("El archivo de Catalogo de cuentas se generó exitosamente.", "success");
 };
 
 onMounted(() => {

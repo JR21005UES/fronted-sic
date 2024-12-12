@@ -29,6 +29,11 @@ const reporteRouter = [
       name: "nuevo_dato",
       component: () => import("../views/CrearDatoView.vue"),
     },
+    {
+      path: "/cierre-contable",
+      name: "cierre_contable",
+      component: () => import("../views/CierreCicloView.vue"),
+    },
 
 
 

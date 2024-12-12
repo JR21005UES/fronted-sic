@@ -18,11 +18,12 @@
             </v-col>
             <v-col cols="6">
               <v-text-field
+                type="date"
+                label="Fecha"
                 variant="outlined"
                 density="compact"
-                label="Fecha"
-                 v-model="form.fecha"
-              />
+                v-model="form.fecha"
+              ></v-text-field>
             </v-col>
             <v-col cols="6">
               <v-text-field
@@ -46,24 +47,43 @@
    </template>
    
    <script setup>
-   
-   import {ref} from "vue";
-   import reportesServices from "@/services/reportes";
-   import {useRouter} from "vue-router";
-   
-   const router = useRouter();
-   
-   const form = ref({
-     num_de_partida: null,
-     fecha: null,
-     concepto: null,
-    
-   })
-   
-   const crearPartida = async () => {
-     await reportesServices.crearPartida(form.value);
-     router.push({name: 'libro_diario'});
-   
-   }
-   </script>
-   
+    import { ref } from "vue";
+    import reportesServices from "@/services/reportes";
+    import { useRouter } from "vue-router";
+    import useNoti from "@/composables/useNoti";
+
+    const { notify } = useNoti(); // Inicializar notificaciones
+
+    const router = useRouter();
+
+    const form = ref({
+      num_de_partida: null,
+      fecha: null,
+      concepto: null,
+    });
+
+    const crearPartida = async () => {
+      if (!form.value.num_de_partida || !form.value.fecha || !form.value.concepto) {
+        notify("Todos los campos son obligatorios", "error");
+        return;
+      }
+
+      try {
+        await reportesServices.crearPartida(form.value);
+        notify("Partida creada exitosamente", "success");
+        router.push({ name: "libro_diario" });
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          // Mostrar todos los errores devueltos por el backend
+          const errors = error.response.data.errors;
+          Object.keys(errors).forEach((field) => {
+            errors[field].forEach((message) => {
+              notify(message, "error");
+            });
+          });
+        } else {
+          notify("Ocurrió un error inesperado", "error");
+        }
+      }
+    };
+</script>

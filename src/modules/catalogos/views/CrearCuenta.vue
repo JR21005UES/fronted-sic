@@ -61,6 +61,9 @@
 import {ref} from "vue";
 import catalogoServices from "@/services/catalogos";
 import {useRouter} from "vue-router";
+import useNoti from "@/composables/useNoti";
+
+const { notify } = useNoti(); // Inicializar notificaciones
 
 const router = useRouter();
 const selects = ref({
@@ -76,10 +79,6 @@ const selects = ref({
     {
       id: 3,
       nombre: 'Acreedora'
-    },
-    {
-      id: 4,
-      nombre: 'Acreedora cuenta R'
     }
   ],
 })
@@ -92,8 +91,21 @@ const form = ref({
 })
 
 const crearCuenta = async () => {
-  await catalogoServices.crearCuenta(form.value);
-  router.push({name: 'listado_cuentas'});
+  try {
+    // Llamar al servicio de creación de cuenta
+    const response = await catalogoServices.crearCuenta(form.value);
 
-}
+    // Verificar si el código de estado es 201
+    if (response.status === 201) {
+      router.push({ name: 'listado_cuentas' }); // Redirigir después de crear
+    } else {
+      // Manejar otros casos de error
+    }
+  } catch (error) {
+    // Capturar errores del servidor o problemas de red
+    console.error("Error al crear la cuenta:", error);
+    notify("Ocurrió un error al crear la cuenta. Intenta nuevamente.", "error");
+  }
+};
+
 </script>

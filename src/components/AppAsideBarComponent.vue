@@ -22,69 +22,74 @@
     <v-divider></v-divider>
     <v-list v-model:opened="open" color="indigo-darken-4">
       <span v-for="(route, i) in router" :key="i">
-       <v-tooltip
-         v-if="route.hijos && route.hijos.length"
-         :text="route.name"
-         color="primary"
-       >
-         <template #activator = "{ props }">
-           <v-list-group
-             v-bind="props"
-             :key="route.id"
-             :value="route.name"
-             link
-             color="indigo-darken-4"
-           >
-             <template #activator="{ props }">
-               <v-list-item
-                 v-bind="props"
-                 color="indigo-darken-4"
-                 :prepend-icon="route.icono"
-                 :title="route.name"
-                 :exact="true"
-               />
-             </template>
-             <v-list-item
-               v-for="(child, j) in router[i].hijos"
-
-               :key="j"
-               :title="child.name"
-               :prepend-icon="child.icono"
-               :to="{ name: child.uriName }"
-               :exact="true"
-             />
-           </v-list-group>
-         </template>
-       </v-tooltip>
-        <v-tooltip v-else :text="route.name">
-            <template v-slot:activator="{ props }">
+        <v-tooltip
+          v-if="route.hijos && route.hijos.length"
+          :text="route.name"
+          color="primary"
+        >
+          <template #activator="{ props }">
+            <v-list-group
+              v-bind="props"
+              :key="route.id"
+              :value="route.name"
+              link
+              color="indigo-darken-4"
+              :disabled="isCierreActivo"
+            >
+              <template #activator="{ props }">
+                <v-list-item
+                  v-bind="props"
+                  color="indigo-darken-4"
+                  :prepend-icon="route.icono"
+                  :title="route.name"
+                  :exact="true"
+                  :disabled="isCierreActivo"
+                />
+              </template>
               <v-list-item
-                v-bind="props"
-                :key="i"
-                :prepend-icon="route.icono"
-                :title="route.name"
-                :to="{ name: route.uriName }"
+                v-for="(child, j) in router[i].hijos"
+                :key="j"
+                :title="child.name"
+                :prepend-icon="child.icono"
+                :to="{ name: child.uriName }"
                 :exact="true"
+                :disabled="isCierreActivo"
               />
-            </template>
-          </v-tooltip>
+            </v-list-group>
+          </template>
+        </v-tooltip>
+        <v-tooltip v-else :text="route.name">
+          <template v-slot:activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              :key="i"
+              :prepend-icon="route.icono"
+              :title="route.name"
+              :to="{ name: route.uriName }"
+              :disabled="isCierreActivo"
+              :exact="true"
+            />
+          </template>
+        </v-tooltip>
       </span>
     </v-list>
   </v-navigation-drawer>
 </template>
-<script setup>
-import { useDisplay } from 'vuetify'
-import {computed, ref} from "vue";
-import {useAuthStore} from "@/store/auth";
 
-const display = useDisplay()
+<script setup>
+import { useDisplay } from 'vuetify';
+import { ref } from 'vue';
+import { useAuthStore } from '@/store/auth';
+import { isCierreActivo } from '@/composables/useCierreContable'; // Importa la variable global
+
+const display = useDisplay();
 
 const props = defineProps({
   modelValue: {
     type: Boolean,
     required: true,
   },
-})
+});
 
 const router = [
   {
@@ -134,26 +139,25 @@ const router = [
         uri: 'balance-general',
         uriName: 'balance_general',
         icono: 'mdi-badge-account-horizontal',
-      }
+      },
     ],
   },
-]
-const auth = useAuthStore()
-const open = ref(['Usuario'])
+  {
+    id: 4,
+    name: 'Cierre',
+    uri: 'cierre-contable',
+    uriName: 'cierre_contable',
+    icono: 'mdi-book-multiple',
+  },
+];
+const auth = useAuthStore();
+const open = ref(['Usuario']);
 
-
-const drawer = computed(() => {
-  if (display.xs.value || display.sm.value) {
-    return props.modelValue
-  }
-  return true
-})
 const closeAll = () => {
-  open.value = []
-}
+  open.value = [];
+};
 
 defineExpose({
   closeAll,
-})
-
+});
 </script>

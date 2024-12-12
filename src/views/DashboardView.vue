@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <v-main class="background-container">
       <v-container>
         <h1 class="text-center">Últimas Transacciones</h1>
         <v-btn color="primary" class="mb-4" @click="refrescarTabla">
@@ -51,8 +50,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </v-container>
-    </v-main>
+      </v-container>    
   </v-app>
 </template>
 

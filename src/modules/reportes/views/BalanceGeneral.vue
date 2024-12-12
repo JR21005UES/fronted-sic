@@ -7,7 +7,7 @@
           label="Buscar..." />
       </div>
       <!-- Botón para generar el archivo Excel -->
-      <v-btn @click="generarExcel" color="primary" elevation="2">Generar Excel</v-btn>
+      <v-btn @click="generarExcel" color="green-darken-4" elevation="2">Generar Excel</v-btn>
     </v-row>
     <v-data-table :headers="headers" :items="items_tabla" no-data-text="Sin datos para mostrar" :search="filtro" class="elevation-1">
       <template #item.accion="{ item }">
@@ -54,27 +54,43 @@ const generarExcel = async () => {
   const worksheet = workbook.addWorksheet('Balance General');
 
   // Agregar un título
-  worksheet.mergeCells('A1:C1'); // Fusionar celdas para el título
-  const titleCell = worksheet.getCell('A1');
+  worksheet.mergeCells('B1:C1'); // Fusionar celdas para el título
+  const titleCell2 = worksheet.getCell('B1');
+  titleCell2.value = 'ENCOM S.A. de C.V.';
+  titleCell2.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
+  titleCell2.font = { bold: true, size: 14 }; // Estilo de la fuente
+  // Agregar un título
+  worksheet.mergeCells('B2:C2'); // Fusionar celdas para el título
+  const titleCell = worksheet.getCell('B2');
   titleCell.value = 'Balance General';
-  titleCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
-  titleCell.font = { bold: true, size: 14 }; // Estilo de la fuente
+  titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  titleCell.font = { bold: true, size: 14 };
 
   // Agregar encabezados de la tabla
-  worksheet.addRow([ 'Cuenta', 'Parcial']).font = { bold: true };
+  worksheet.addRow(['', 'Cuenta', 'Parcial']).font = { bold: true };
 
   // Agregar datos
   items_tabla.value.forEach((item) => {
-    worksheet.addRow([item.nombre_cuenta, item.total]);
+    worksheet.addRow(['',item.nombre_cuenta, item.total]);
   });
 
   // Ajustar ancho de columnas
   worksheet.columns = [
+    { width: 10 }, // Columna 3: Parcial
     { width: 40 }, // Columna 2: Cuenta
     { width: 15 }, // Columna 3: Parcial
   ];
 
   // Crear el archivo Excel
+  const titleCell3 = worksheet.getCell('B18');
+        titleCell3.value = 'Firma';
+        titleCell3.alignment = { vertical: 'middle' }; // Centrar el texto
+        titleCell3.font = { bold: true, size: 14 }; // Estilo de la fuente
+
+        const titleCell4 = worksheet.getCell('C18');
+        titleCell4.value = 'Firma';
+        titleCell4.alignment = { vertical: 'middle' }; // Centrar el texto
+        titleCell4.font = { bold: true, size: 14 }; // Estilo de la fuente
   const buffer = await workbook.xlsx.writeBuffer();
 
   // Descargar el archivo

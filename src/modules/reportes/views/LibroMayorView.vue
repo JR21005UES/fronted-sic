@@ -8,13 +8,13 @@
         </div>
       <!-- Botón para generar el archivo Excel -->
       <v-row justify="end" class="my-3" style="gap: 10px;">
-  <v-btn @click="generarExcelBalanza" color="primary" elevation="2">
-    Excel Balanza de Comprobación
-  </v-btn>
-  <v-btn @click="generarExcelMovimientos" color="secondary" elevation="2">
-    Excel Libro Mayor
-  </v-btn>
-</v-row>
+        <v-btn @click="generarExcelBalanza" color="green-darken-3" elevation="2">
+          Excel Balanza de Comprobación
+        </v-btn>
+        <v-btn @click="generarExcelMovimientos" color="green-darken-4" elevation="2">
+          Excel Libro Mayor
+        </v-btn>
+      </v-row>
 
     </v-row>
     <v-data-table :headers="headers" :items="items_tabla" no-data-text="Sin datos para mostrar" :search="filtro" class="elevation-1">
@@ -130,7 +130,6 @@ const cuentaSeleccionada = ref(null);
 const llenarTabla = async () => {
   try {
     const { data } = await reporteServices.getLibroMayor();
-    console.log('Datos cargados:', data); // Verifica los datos en la consola
     items_tabla.value = data;
   } catch (error) {
     console.error('Error al cargar los datos:', error);
@@ -169,21 +168,27 @@ const generarExcelBalanza = async () => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Balanza de Comprobación');
 
+  worksheet.mergeCells('B1:G1'); // Fusionar celdas para el título
+  const titleCell2 = worksheet.getCell('B1');
+  titleCell2.value = 'ENCOM S.A. de C.V.';
+  titleCell2.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
+  titleCell2.font = { bold: true, size: 14 }; // Estilo de la fuente
   // Agregar un título
-  worksheet.mergeCells('A1:F1'); // Fusionar celdas para el título
-  const titleCell = worksheet.getCell('A1');
-  titleCell.value = 'Balanza de Comprobación';
-  titleCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
-  titleCell.font = { bold: true, size: 14 }; // Estilo de la fuente
+  worksheet.mergeCells('B2:G2'); // Fusionar celdas para el título
+  const titleCell = worksheet.getCell('B2');
+  titleCell.value = 'Balance de Comprobacion';
+  titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  titleCell.font = { bold: true, size: 14 };
 
   // Agregar encabezados
-  worksheet.addRow(['Código', 'Nombre de la Cuenta', 'Debe', 'Haber', 'Saldo Deudor', 'Saldo Acreedor']).font = {
+  worksheet.addRow(['','Código', 'Nombre de la Cuenta', 'Debe', 'Haber', 'Saldo Deudor', 'Saldo Acreedor']).font = {
     bold: true,
   };
 
   // Agregar datos de la tabla principal
   items_tabla.value.forEach((item) => {
     worksheet.addRow([
+      '',
       item.codigo,
       item.nombre_cuenta,
       item.debe,
@@ -195,6 +200,7 @@ const generarExcelBalanza = async () => {
 
   // Ajustar ancho de columnas
   worksheet.columns = [
+    { width: 10 }, // Columna 1: Código
     { width: 10 }, // Columna 1: Código
     { width: 30 }, // Columna 2: Nombre de la Cuenta
     { width: 15 }, // Columna 3: Debe
@@ -222,14 +228,20 @@ const generarExcelMovimientos = async () => {
   const worksheet = workbook.addWorksheet('Libro Mayor');
 
   // Agregar un título
-  worksheet.mergeCells('A1:F1'); // Fusionar celdas para el título
-  const titleCell = worksheet.getCell('A1');
+  worksheet.mergeCells('B1:G1'); // Fusionar celdas para el título
+  const titleCell2 = worksheet.getCell('B1');
+  titleCell2.value = 'ENCOM S.A. de C.V.';
+  titleCell2.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
+  titleCell2.font = { bold: true, size: 14 }; // Estilo de la fuente
+  // Agregar un título
+  worksheet.mergeCells('B2:G2'); // Fusionar celdas para el título
+  const titleCell = worksheet.getCell('B2');
   titleCell.value = 'Libro Mayor';
-  titleCell.alignment = { horizontal: 'center', vertical: 'middle' }; // Centrar el texto
-  titleCell.font = { bold: true, size: 14 }; // Estilo de la fuente
+  titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  titleCell.font = { bold: true, size: 14 };
 
   // Agregar encabezados
-  worksheet.addRow(['Cuenta', 'Partida No.', 'Debe', 'Haber', 'Parcial', 'Concepto']).font = { bold: true };
+  worksheet.addRow(['','Cuenta', 'Partida No.', 'Debe', 'Haber', 'Parcial', 'Concepto']).font = { bold: true };
 
    // Iterar sobre las cuentas y agregar los movimientos
    items_tabla.value.forEach((item) => {
@@ -239,6 +251,7 @@ const generarExcelMovimientos = async () => {
 
       item.movimientos.forEach((movimiento) => {
         worksheet.addRow([
+          '',
           item.nombre_cuenta, // Columna para la cuenta
           movimiento.numero_partida, // Columna para el número de partida
           movimiento.debe,
@@ -251,6 +264,7 @@ const generarExcelMovimientos = async () => {
 
       // Agregar la fila de suma total para esta cuenta
       worksheet.addRow([
+        '',
         `Total de ${item.nombre_cuenta}`, // Texto para la columna "Cuenta"
         '', // Partida No. vacío
         '', // Debe vacío
@@ -263,6 +277,7 @@ const generarExcelMovimientos = async () => {
 
   // Ajustar ancho de columnas
   worksheet.columns = [
+    { width: 10 }, // Columna 2: Partida No.
     { width: 50 }, // Columna 1: Cuenta
     { width: 10 }, // Columna 2: Partida No.
     { width: 15 }, // Columna 3: Debe

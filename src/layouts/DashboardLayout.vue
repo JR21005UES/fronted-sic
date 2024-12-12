@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="background-container">
     <app-aside-bar-component
       ref="asideBar"
       v-model="drawer"
@@ -36,3 +36,15 @@ const close = () => {
 
 
 </script>
+<style scoped>  
+  /* Contenedor principal con el fondo */
+.background-container {
+  background-image: url('@/assets/background.png');
+  background-size: cover; /* Ajusta el fondo para que cubra todo */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* No repite la imagen */
+  min-height: 100vh; /* Altura mínima para cubrir la ventana */
+  display: flex;
+  flex-direction: column;
+}
+</style>
