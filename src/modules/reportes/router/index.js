@@ -25,8 +25,8 @@ const reporteRouter = [
       component: () => import("../views/CrearPartida.vue"),
     },
     {
-      path: "/nuevos-datos",
-      name: "nuevos_datos",
+      path: "/nuevo-dato",
+      name: "nuevo_dato",
       component: () => import("../views/CrearDatoView.vue"),
     },
 

@@ -246,7 +246,7 @@ const generarExcelMovimientos = async () => {
           movimiento.total,
           movimiento.concepto,
         ]);
-        totalParcial += movimiento.total; // Sumar el parcial
+        totalParcial = movimiento.total; // Sumar el parcial
       });
 
       // Agregar la fila de suma total para esta cuenta

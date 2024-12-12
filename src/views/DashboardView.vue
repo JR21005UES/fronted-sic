@@ -61,11 +61,10 @@ import { ref, onMounted } from 'vue';
 import reporteServices from '@/services/reportes';
 
 const headers = [
-  { text: 'Número de Partida', value: 'numero_partida' },
-  { text: 'Concepto', value: 'concepto' },
-  { text: 'Acción', value: 'accion', align: 'center', sortable: false },
-];
-
+  { align: "center", key: "numero_partida", sortable: false, title: "Numero de Partida" },
+  { align: "center", key: "concepto", sortable: false, title: "Concepto" },
+  { align: "center", key: "accion", sortable: false, title: "Accion" },
+]
 const ultimasPartidas = ref([]);
 const modalVisible = ref(false);
 const partidaSeleccionada = ref(null);
